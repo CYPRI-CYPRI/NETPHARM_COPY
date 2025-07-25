@@ -152,6 +152,24 @@
       ]
     };
 
+    const recommendations = {
+      gabapentin: {
+        renal: `<div class="recommendation-box renal">
+<b>Renal Impairment:</b><br><b>Risks:</b> risk of overdose due to cumulation of the drug<br>
+<b>Risk monitoring:</b> monitor renal function regularly<br>
+<b>Dose adjustment:</b><br>
+eGFR ≥80 ml/min: daily dose 900–3600 mg (in 3 daily doses),<br>
+eGFR 50–79 ml/min: 600–1800 mg/day (in 3 daily doses),<br>
+eGFR 30–49 ml/min: 300–900 mg/day (in 3 daily doses),<br>
+eGFR 15–29 ml/min: 150 mg on alternate days – 600 mg/day (in 3 daily doses),<br>
+eGFR <15 ml/min: 150 mg on alternate days – 300 mg/day; reduce daily dose in proportion to creatinine clearance.<br>
+In anuric patients on hemodialysis, an initial dose of 300–400 mg/day is recommended, followed by 200 to 300 mg of gabapentin after every 4 hours of dialysis. On non-dialysis days, gabapentin therapy should not be administered.<br>
+<b>Recommendation:</b> use with caution<br>
+Gabapentin may be administered provided that renal function is closely monitored and appropriate dose adjustments are made, especially when eGFR is below 60 ml/min. This agent should be used with caution in patients showing unstable or progressively declining renal function, AKI, and nephrotic syndrome.
+</div>`
+      }
+    };
+
     function showMedications() {
       const painType = document.getElementById('painType').value;
       const medicationBox = document.getElementById('medicationsBox');
@@ -182,24 +200,19 @@
     }
 
     function showMultipleRecommendations() {
-      const med = document.getElementById('medication').value;
-      const checkboxes = document.querySelectorAll('#comorbidityBox input[type=checkbox]');
-      let output = '';
-      checkboxes.forEach(cb => {
-        if (cb.checked) {
-          const comorbidity = cb.value;
-          let content = '';
-          let cssClass = comorbidity;
+      const selectedMed = document.getElementById('medication').value;
+      const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+      const recommendationBox = document.getElementById('recommendation');
+      let result = '';
 
-          if (med === 'gabapentin') {
-            if (comorbidity === 'frailty') {
-              content = `Gabapentin poses fall and CNS toxicity risk (dizziness, sedation, ataxia). Avoid in non-neuropathic pain (STOPP/START). Monitor cognition, gait, and sedation.`;
-            } else if (comorbidity === 'cardiac') {
-              content = `Gabapentin may worsen fluid retention and heart failure. Monitor for edema and dyspnea.`;
-            } else if (comorbidity === 'hepatic') {
-              content = `Gabapentin may cause peripheral edema (2–8%). Possible to use with caution. Monitor edema and ascites.`;
-            } else if (comorbidity === 'renal') {
-              content = `<strong>Risks:</strong><br>risk of overdose due to cumulation of the drug<br><strong>Risk monitoring:</strong> monitor renal function regularly<br><strong>Dos...
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked && recommendations[selectedMed] && recommendations[selectedMed][checkbox.value]) {
+          result += recommendations[selectedMed][checkbox.value];
+        }
+      });
+
+      recommendationBox.innerHTML = result || '<div class="recommendation-box">No recommendation available for this combination.</div>';
     }
-  ]
-}
+  </script>
+</body>
+</html>
