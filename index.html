@@ -36,11 +36,11 @@
       margin-right: 10px;
     }
     #painType {
-      margin-top: 0.5cm;
+      margin-top: 0.25cm;
     }
-    label[for="painType"] {
+    label[for="painType"], label[for="medication"] {
       display: block;
-      margin-bottom: 0.5cm;
+      margin-bottom: 0.25cm;
     }
     .references {
       font-size: 10px;
@@ -94,8 +94,8 @@
       <option value="central">Central pain</option>
     </select>
 
-    <div id="medicationsBox" style="margin-top: 0.5cm; display: none;">
-      <label><strong>2. Select recommended medication:</strong></label><br>
+    <div id="medicationsBox" style="margin-top: 0.25cm; display: none;">
+      <label for="medication"><strong>2. Select recommended medication:</strong></label>
       <select id="medication" onchange="showComorbidities()"></select>
     </div>
 
