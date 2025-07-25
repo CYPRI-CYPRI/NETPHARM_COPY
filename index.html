@@ -20,12 +20,17 @@
       border-radius: 10px;
     }
     .recommendation-box {
-      background: white;
-      padding: 10px 15px;
+      padding: 15px;
       border-radius: 8px;
       margin-top: 15px;
       border: 1px solid #ccc;
+      white-space: pre-wrap;
     }
+    .frailty { background-color: #ffc000; }
+    .heart { background-color: #f79646; }
+    .hepatic { background-color: #92d050; }
+    .renal { background-color: #ffd966; }
+
     select, label, input[type=checkbox] {
       font-size: 16px;
     }
@@ -186,16 +191,25 @@
         if (cb.checked) {
           const comorbidity = cb.value;
           let content = '';
-          if (med === 'carbamazepine' && comorbidity === 'renal') {
-            content = 'Monitor sodium and renal function.';
-          } else if (med === 'duloxetine' && comorbidity === 'hepatic') {
-            content = 'Use with caution or avoid in severe hepatic impairment.';
-          } else if ((med === 'gabapentin' || med === 'pregabalin') && comorbidity === 'renal') {
-            content = 'Adjust dose in renal impairment.';
+          let cssClass = comorbidity;
+
+          if (med === 'gabapentin') {
+            if (comorbidity === 'frailty') {
+              content = `Gabapentin poses fall and CNS toxicity risk (dizziness, sedation, ataxia). Avoid in non-neuropathic pain (STOPP/START). Monitor cognition, gait, and sedation.`;
+            } else if (comorbidity === 'cardiac') {
+              content = `Gabapentin may worsen fluid retention and heart failure. Monitor for edema and dyspnea.`;
+            } else if (comorbidity === 'hepatic') {
+              content = `Gabapentin may cause peripheral edema (2–8%). Possible to use with caution. Monitor edema and ascites.`;
+            } else if (comorbidity === 'renal') {
+              content = `Dose adjustment based on eGFR required. Monitor renal function. Avoid in non-dialysis days if on hemodialysis.`;
+            } else {
+              content = 'No specific recommendation available.';
+            }
           } else {
             content = 'No specific recommendation available for this combination.';
           }
-          output += `<div class='recommendation-box'><strong>${cb.nextSibling.textContent.trim()}:</strong> ${content}</div>`;
+
+          output += `<div class='recommendation-box ${cssClass}'><strong>${cb.nextSibling.textContent.trim()}:</strong> ${content}</div>`;
         }
       });
       document.getElementById('recommendation').innerHTML = output;
