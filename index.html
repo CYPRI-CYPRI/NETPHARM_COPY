@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +29,10 @@
     }
     .frailty, .heart, .renal { background-color: #ffc000; }
     .hepatic { background-color: #92d050; }
+
+    .pdf-container {
+      margin-top: 15px;
+    }
 
     select, label, input[type=checkbox] {
       font-size: 16px;
@@ -95,6 +100,8 @@
       <option value="postherpetic">Postherpetic neuropathy</option>
       <option value="trigeminal">Trigeminal neuralgia</option>
       <option value="central">Central pain</option>
+      <!-- ✅ NOVÁ VOLBA -->
+      <option value="unspecified">Neuropathic pain – not specified</option>
     </select>
 
     <div id="medicationsBox" style="margin-top: 0.25cm; display: none;">
@@ -149,6 +156,15 @@
         "Venlafaxine (NICE)",
         "Gabapentin (EFNS)",
         "Pregabalin (EFNS, NICE)"
+      ],
+      /* ✅ Nový blok – všech šest léčiv */
+      unspecified: [
+        "Amitriptyline",
+        "Duloxetine",
+        "Venlafaxine",
+        "Gabapentin",
+        "Pregabalin",
+        "Carbamazepine"
       ]
     };
 
@@ -162,10 +178,15 @@ eGFR ≥80 ml/min: daily dose 900–3600 mg (in 3 daily doses),<br>
 eGFR 50–79 ml/min: 600–1800 mg/day (in 3 daily doses),<br>
 eGFR 30–49 ml/min: 300–900 mg/day (in 3 daily doses),<br>
 eGFR 15–29 ml/min: 150 mg on alternate days – 600 mg/day (in 3 daily doses),<br>
-eGFR <15 ml/min: 150 mg on alternate days – 300 mg/day; reduce daily dose in proportion to creatinine clearance.<br>
+eGFR &lt;15 ml/min: 150 mg on alternate days – 300 mg/day; reduce daily dose in proportion to creatinine clearance.<br>
 In anuric patients on hemodialysis, an initial dose of 300–400 mg/day is recommended, followed by 200 to 300 mg of gabapentin after every 4 hours of dialysis. On non-dialysis days, gabapentin therapy should not be administered.<br>
 <b>Recommendation:</b> use with caution<br>
 Gabapentin may be administered provided that renal function is closely monitored and appropriate dose adjustments are made, especially when eGFR is below 60 ml/min. This agent should be used with caution in patients showing unstable or progressively declining renal function, AKI, and nephrotic syndrome.
+</div>
+<div class="pdf-container">
+  <p><b>Detailed dosing table (PDF):</b></p>
+  <iframe src="GABAPENTIN_RENAL_IMPAIRMENT.pdf#view=FitH" width="100%" height="500px"></iframe>
+  <p><a href="GABAPENTIN_RENAL_IMPAIRMENT.pdf" target="_blank">Open GABAPENTIN_RENAL_IMPAIRMENT.pdf in a new tab</a></p>
 </div>`
       }
     };
@@ -177,11 +198,12 @@ Gabapentin may be administered provided that renal function is closely monitored
       const comorbidityBox = document.getElementById('comorbidityBox');
       const recommendation = document.getElementById('recommendation');
 
+      // reset
       medicationSelect.innerHTML = '<option value="">-- Choose --</option>';
       recommendation.innerHTML = '';
       comorbidityBox.style.display = 'none';
 
-      if (drugOptions[painType]) {
+      if (painType && drugOptions[painType]) {
         drugOptions[painType].forEach(drug => {
           const option = document.createElement('option');
           option.textContent = drug;
@@ -206,12 +228,15 @@ Gabapentin may be administered provided that renal function is closely monitored
       let result = '';
 
       checkboxes.forEach(checkbox => {
-        if (checkbox.checked && recommendations[selectedMed] && recommendations[selectedMed][checkbox.value]) {
+        if (checkbox.checked &&
+            recommendations[selectedMed] &&
+            recommendations[selectedMed][checkbox.value]) {
           result += recommendations[selectedMed][checkbox.value];
         }
       });
 
-      recommendationBox.innerHTML = result || '<div class="recommendation-box">No recommendation available for this combination.</div>';
+      recommendationBox.innerHTML =
+        result || '<div class="recommendation-box">No recommendation available for this combination.</div>';
     }
   </script>
 </body>
